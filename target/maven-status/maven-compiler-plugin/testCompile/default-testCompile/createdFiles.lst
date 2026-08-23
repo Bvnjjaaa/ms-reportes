@@ -1,0 +1,6 @@
+cl\duoc\jv0101\caso04\reportes\cucumber\CucumberSpringConfiguration.class
+cl\duoc\jv0101\caso04\reportes\cucumber\ReporteSteps.class
+cl\duoc\jv0101\caso04\reportes\OpenApiConfigTest.class
+cl\duoc\jv0101\caso04\reportes\ReporteControllerTest.class
+cl\duoc\jv0101\caso04\reportes\ReporteServiceTest.class
+cl\duoc\jv0101\caso04\reportes\cucumber\CucumberRunnerTest.class
