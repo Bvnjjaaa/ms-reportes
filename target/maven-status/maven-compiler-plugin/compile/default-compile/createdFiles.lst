@@ -1,6 +1,6 @@
-cl\duoc\jv0101\caso04\reportes\model\Reporte.class
-cl\duoc\jv0101\caso04\reportes\service\ReporteService.class
-cl\duoc\jv0101\caso04\reportes\repository\ReporteRepository.class
-cl\duoc\jv0101\caso04\reportes\controller\ReporteController.class
-cl\duoc\jv0101\caso04\reportes\config\OpenApiConfig.class
-cl\duoc\jv0101\caso04\reportes\ReporteApplication.class
+cl\novabank\reportes\service\ReporteService.class
+cl\novabank\reportes\controller\ReporteController.class
+cl\novabank\reportes\ReportesApplication.class
+cl\novabank\reportes\model\Reporte$ReporteBuilder.class
+cl\novabank\reportes\repository\ReporteRepository.class
+cl\novabank\reportes\model\Reporte.class
