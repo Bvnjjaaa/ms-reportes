@@ -1,65 +1,57 @@
-# Reportes y Cumplimiento — Microservicio de riesgo reportes
+# ms-reportes — Microservicio de Reportes
 
-Microservicio correspondiente al **caso caso04 — NovaBank** (Banca digital / fintech) de la Evaluación Parcial N°1.
+Microservicio correspondiente al **caso NovaBank** (Banca digital / fintech) de la **Evaluación Parcial N°2**.
 
 | | |
 |---|---|
-| Asignatura | JVY0101 — Java: Diseño y Construcción de Soluciones Nativas en Nube |
-| Stack | Spring Boot 3.3 · Java 21 · Maven · Spring Data JPA · H2 · springdoc-openapi |
-| Calidad | JaCoCo cobertura LINE 100% · Cucumber (BDD) alineado a endpoints REST |
-| Entrega | Docker / Docker Compose |
+| **Asignatura** | JVY0101 — Java: Diseño y Construcción de Soluciones Nativas en Nube |
+| **Stack** | Spring Boot 3.2.5 · Java 17 · Maven Wrapper · Spring Data JPA · H2 Database |
+| **Arquitectura** | Capas (Controller, Service, Repository, Model) |
+| **Puerto** | 8087 |
 
 ## Responsabilidad (SRP)
 
-administra los datos y la lógica del dominio de Reportes y Cumplimiento del caso caso04 (NovaBank). Su base de datos es una **H2 en memoria** (un solo microservicio por base), cumpliendo aislamiento de datos por dominio.
+Gestiona la generación, consulta y eliminación de reportes de NovaBank, registrando el título, el tipo de reporte, quién lo generó, sus parámetros, la fecha de generación y el estado (GENERADO). Permite filtrar reportes por tipo. Su base de datos es una **H2 en memoria** (`jdbc:h2:mem:novabank_reports_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE`), cumpliendo aislamiento de datos por dominio.
 
-## Página de presentación
+## Consola y Persistencia
 
-Al ejecutar el servicio, `http://localhost:8080/` muestra la página de presentación del microservicio con documentación y enlaces a:
+Al ejecutar el servicio en el puerto `8087`, se puede acceder a la consola de persistencia H2:
 
-- **Swagger UI**: `/swagger-ui/index.html`
-- **OpenAPI (yaml)**: `/v3/api-docs.yaml`
-- **ReDoc**: `/redoc.html`
-- **H2 Console**: `/h2-console`
+- **H2 Console**: `http://localhost:8087/h2-console`
+- **JDBC URL**: `jdbc:h2:mem:novabank_reports_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE`
+- **Usuario**: `sa`
+- **Contraseña**: *(en blanco)*
 
-## Endpoints
+## Endpoints Principales (`/api/reportes`)
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
-| GET | `/api/reportes` | Lista todos los recursos |
-| GET | `/api/reportes/{id}` | Obtiene un recurso por id |
-| POST | `/api/reportes` | Crea un recurso |
-| PUT | `/api/reportes/{id}` | Actualiza un recurso |
-| DELETE | `/api/reportes/{id}` | Elimina un recurso |
+| POST | `/api/reportes/generar` | Genera un reporte validando título, tipo y generadoPor; asigna fecha de generación y estado GENERADO; responde 201. |
+| GET | `/api/reportes` | Lista todos los reportes registrados. |
+| GET | `/api/reportes/{id}` | Obtiene un reporte por id; lanza error si no existe. |
+| GET | `/api/reportes/tipo/{tipoReporte}` | Lista los reportes de un tipo determinado. |
+| DELETE | `/api/reportes/{id}` | Elimina un reporte por id; responde 204 si tuvo éxito. |
 
-## Documentación del proyecto
+## Instrucciones de Clonación, Compilación y Ejecución Local
 
-La documentación completa está en la carpeta [`docs/`](docs/):
+1. **Clonar el repositorio:**
+   ```bash
+   git clone <URL_DEL_REPOSITORIO>
+   cd ms-reportes
+   ```
 
-- [`docs/00_Resumen.md`](docs/00_Resumen.md) — propósito, responsabilidad y tecnologías
-- [`docs/01_Arquitectura.md`](docs/01_Arquitectura.md) — componentes, arquitectura y patrones
-- [`docs/02_API.md`](docs/02_API.md) — contrato REST y ejemplos curl
-- [`docs/03_Pruebas.md`](docs/03_Pruebas.md) — tests unitarios, cobertura y Cucumber
-- [`docs/04_Despliegue.md`](docs/04_Despliegue.md)
-- [`docs/05_Justificacion.md`](docs/05_Justificacion.md) — justificación del servicio: RF/RNF/seguridad cubiertos, stack y por qué cada tecnología AWS
-- [`docs/diagramas/`](docs/diagramas/) — C4 (contexto, contenedores, componentes), secuencia e infraestructura AWS — Docker, Docker Compose e integración
+2. **Compilar y empaquetar con Maven Wrapper:**
+   ```bash
+   .\mvnw.cmd clean package -DskipTests
+   ```
 
-## Cómo ejecutar locmente
-
-```bash
-mvn spring-boot:run
-```
-
-## Cómo ejecutar con Docker
-
-```bash
-docker compose up --build
-# http://localhost:8080
-```
+3. **Ejecutar el ejecutable .jar generado:**
+   ```bash
+   java -jar target/ms-reportes-1.0.0.jar
+   ```
 
 ## Cómo ejecutar las pruebas
 
 ```bash
-mvn test      # unit tests + Cucumber
-mvn verify    # + verificación de cobertura JaCoCo (100% LINE, falla si baja)
+.\mvnw.cmd test
 ```
