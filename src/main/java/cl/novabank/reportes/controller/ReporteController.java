@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,7 +23,7 @@ public class ReporteController {
 
     private final ReporteService reporteService;
 
-    @PostMapping("/generar")
+    @PostMapping({"", "/generar"})
     @ResponseStatus(HttpStatus.CREATED)
     public Reporte generarReporte(@Valid @RequestBody Reporte reporte) {
         return reporteService.generarReporte(reporte);
@@ -41,6 +42,11 @@ public class ReporteController {
     @GetMapping("/tipo/{tipoReporte}")
     public List<Reporte> listarPorTipo(@PathVariable String tipoReporte) {
         return reporteService.listarPorTipo(tipoReporte);
+    }
+
+    @PutMapping("/{id}")
+    public Reporte actualizarReporte(@PathVariable Long id, @Valid @RequestBody Reporte datos) {
+        return reporteService.actualizarReporte(id, datos);
     }
 
     @DeleteMapping("/{id}")

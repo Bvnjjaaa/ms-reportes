@@ -1,8 +1,6 @@
 services:
-  reportes-svc:
+  reportes:
     build: .
-    image: duoc/jv0101-caso04-reportes:1.0.0
-    container_name: caso04-reportes-svc
+    image: novabank/reportes:local
     ports:
-      - "${PORT:-8080}:8080"
-    restart: unless-stopped
+      - "127.0.0.1:${PORT:-8087}:8080"

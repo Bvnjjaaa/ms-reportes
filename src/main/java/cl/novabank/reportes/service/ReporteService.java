@@ -5,8 +5,10 @@ import cl.novabank.reportes.repository.ReporteRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +27,17 @@ public class ReporteService {
     @Transactional(readOnly = true)
     public Reporte obtenerPorId(Long id) {
         return reporteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reporte no encontrado con id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reporte no encontrado: " + id));
+    }
+
+    @Transactional
+    public Reporte actualizarReporte(Long id, Reporte datos) {
+        Reporte reporte = obtenerPorId(id);
+        reporte.setTitulo(datos.getTitulo());
+        reporte.setTipoReporte(datos.getTipoReporte());
+        reporte.setGeneradoPor(datos.getGeneradoPor());
+        reporte.setParametros(datos.getParametros());
+        return reporte;
     }
 
     @Transactional(readOnly = true)
@@ -41,7 +53,7 @@ public class ReporteService {
     @Transactional
     public void eliminarReporte(Long id) {
         if (!reporteRepository.existsById(id)) {
-            throw new RuntimeException("Reporte no encontrado con id: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reporte no encontrado: " + id);
         }
         reporteRepository.deleteById(id);
     }
